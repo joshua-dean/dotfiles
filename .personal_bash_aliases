@@ -30,6 +30,16 @@
 
 # [String Manipulation]
 
+# Debug function for checking input and output sources
+# I mainly use this as a reference
+function debug_check_io {
+    [[ -t 1 ]] && echo 'shell is tty'
+    [[ -p /dev/stdout ]] && echo 'stdout is pipe'
+    [[ ! -t 1 && ! -p /dev/stdout ]] && echo 'stdout is redirect'
+    [[ -f /dev/stdin ]] && echo 'stdin is file'
+    [[ -p /dev/stdin ]] && echo 'stdin is pipe'
+}
+
 # Remove whitespace from a string
 function strip_whitespace {
     sed 's/^[[:space:]]*//;s/[[:space:]]*$//' "$1"
@@ -38,6 +48,37 @@ function strip_whitespace {
 # Remove newlines from a string
 function strip_newlines {
     tr -d '\n' "$1"
+}
+
+# Wrap the input in double quotes
+# If input comes from a pipe, wrap the whole contents
+# Newlines get removed if reading from a pipe
+function doublequote {
+    if [ "$#" -gt 0 ]; then
+        # Normal Args
+        printf %s \""$*"\"
+    elif [[ -p /dev/stdin ]]; then
+        # Input from pipe
+        local line
+        printf '"'
+        while IFS= read -r line; do
+            printf %s "$line"
+        done
+        printf '"'
+    fi
+}
+
+# Given a list of arguments, 
+# produce a regex that matches a string containing all of them, in any order.
+# It accomplishes matching in "any order" by matching each argument with positive lookahead
+# Use at your own risk! Many cases of positive lookahead can make a really slow regex.
+# Don't use this to blindly generate a regex for a production environment.
+function include_list_regex {
+    local ret_regex=""
+    for arg in "$@"; do
+        ret_regex+="(?=.${arg})"
+    done
+    echo "$ret_regex"
 }
 
 # [General Utilities]
@@ -101,6 +142,20 @@ function scan-inactive-scsi-hosts {
             sudo bash -c "echo '- - -' > /sys/class/scsi_host/host$host_idx/scan"
         fi
     done
+}
+
+# [Process Monitoring]
+
+# awk to pull PID from `ps` (pipe to this, generally)
+# e.g. `ps <some-heinous-condition> | awk-pid`
+# For simple calls, just use `pidof`
+function awk-pid {
+    awk '{ print $2 }'
+}
+
+# "Ninja" meaning the grep won't return itself, primarily for process listing
+function ninjagrep {
+    grep "$*" | grep -v grep
 }
 
 # [Networking]
