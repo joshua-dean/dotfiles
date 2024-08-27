@@ -45,12 +45,16 @@ function debug_check_io {
 
 # Remove whitespace from a string
 function strip_whitespace {
-    sed 's/^[[:space:]]*//;s/[[:space:]]*$//' "$1"
+    # Quoting input to sed breaks everything
+    # shellcheck disable=SC2086
+    sed 's/^[[:space:]]*//;s/[[:space:]]*$//' $1
 }
 
 # Remove newlines from a string
 function strip_newlines {
-    tr -d '\n' "$1"
+    # Quoting input to tr breaks everything
+    # shellcheck disable=SC2086
+    tr -d '\n' $1
 }
 
 # Wrap the input in double quotes
