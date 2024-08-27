@@ -1,0 +1,109 @@
+#!/bin/bash
+# Personal bash aliases and utility functions
+
+# These are for use on development machines,
+# e.g. not production machines or machines with important credentials
+
+# Anything that could be potentially dangerous (as many Linux commands are)
+# has a comment stating: "Use at your own risk!"
+# Usually these will require a sudo prompt, but not always.
+# I do my best to explain what could go wrong, but it may not be comprehensive.
+
+# I denote main sections with [Section Name]
+# Current sections are:
+# [String Manipulation]
+# [General Utilities]
+# [Disk Utilities]
+# [Process Monitoring]
+# [Networking]
+
+# To utilize this, add the following lines to ~/.bashrc:
+# if [ -f ~/.personal_bash_aliases ]; then
+#    source ~/.personal_bash_aliases
+# fi
+
+# Dependencies (not needed unless you use the corresponding aliases)
+# Not necessarily a comprehensive list - depends on your system
+# [orpie](https://github.com/pelzlpj/orpie)
+# [xsel](https://github.com/kfish/xsel)
+# [lsscsi](https://github.com/doug-gilbert/lsscsi)
+
+# [String Manipulation]
+
+# Remove whitespace from a string
+function strip_whitespace {
+    sed 's/^[[:space:]]*//;s/[[:space:]]*$//' "$1"
+}
+
+# Remove newlines from a string
+function strip_newlines {
+    tr -d '\n' "$1"
+}
+
+# [General Utilities]
+
+# Reverse Polish Notation Calculator
+alias rpn-calc='orpie'
+alias rpn='orpie'
+
+# Get the last command executed
+alias last_cmd='fc -ln -1 | strip_whitespace'
+
+# Copy the last command
+alias cpl='last_cmd | strip_newlines | xsel --clipboard'
+
+# Shortcut for clipboard, usually I pipe to this
+alias clip='xclip -selection clipboard'
+
+# Clip the working directory
+alias clipwd='pwd | clip'
+alias cwd='pwd | clip'
+
+# Run a command with `sudo`, attempting to preserve aliases
+# Use at your own risk! Existing commands can be overwritten by aliases,
+# Thus anything ran this way may work differently than expected.
+# This could also be a security risk if a non-sudo user has access
+# to the sourced `.bashrc`
+function sudo-with-aliases {
+    sudo bash --rcfile "$HOME"/.bashrc -ci "$1"
+}
+
+# [Disk Utilities]
+
+# Disk usage summary, human readable
+alias dush='du -sh *'
+
+# Disconnect and spin down a HDD
+# Use at your own risk!
+# Usage: `disconnect-hdd sdX`
+function disconnect-hdd {
+    local drive
+    drive="$1"
+    sudo umount /dev/"$drive"
+    sudo hdparm -Y /dev/"$drive"
+    sudo bash -c "echo 1 > /sys/block/$drive/device/delete"
+}
+
+# Scans SCSI hosts, but only if they are inactive
+# Checks /sys/class/scsi_host for available hosts,
+# and sees if the hosts show up in `lsscsi`
+# Use at your own risk! The parsing here could definitely go belly-up
+# If you scan an active device, this could interrupt reads/writes
+function scan-inactive-scsi-hosts {
+    local host_ids
+    local raw_scsi_hosts
+
+    raw_scsi_hosts=$(find /sys/class/scsi_host -maxdepth 1 -mindepth 1)
+    host_ids=$(echo "$raw_scsi_hosts" | sed -E 's/(.+)host([0-9]+)/\2/g')
+
+    for host_idx in $host_ids; do
+        if [ -z "$(lsscsi -i "$host_idx")" ]; then
+            sudo bash -c "echo '- - -' > /sys/class/scsi_host/host$host_idx/scan"
+        fi
+    done
+}
+
+# [Networking]
+
+# Get the public IP via cloudflare
+alias whoami-cloudflare="dig +short txt ch whoami.cloudflare @1.0.0.1"
