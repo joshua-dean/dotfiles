@@ -49,22 +49,20 @@ function echo_local_package_versions {
     #       For each string matching the semantic version regex
     #           print the file and the version
     for search_file in "${files_to_search_for[@]}"; do
-        find . -name "$search_file" > tmp
+        find . -name "$search_file" >tmp
         while IFS= read -r file; do
             version=$(grep -E '__version__ = .+"' "$file" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
             echo "$file": "$version"
-        done < tmp
+        done <tmp
         rm tmp
     done
 }
 alias catver='echo_local_package_versions'
 
-
 # [Pip Utilities]
 
 # Apply this to problematic pip packages
 alias pip-hammer='python -m pip install --upgrade --no-cache-dir --force-reinstall'
-
 
 # [Conda/Mamba Utilities]
 
@@ -90,7 +88,7 @@ function locate_conda {
 
 # Locates and removes the "package cache" directory used by mamba
 # Useful if you killed an in-progress solve
-# and solves are now complaining about the cache 
+# and solves are now complaining about the cache
 function clear_mamba_cache {
     # Locate the "package cache" directory
     local package_cache_dir
@@ -110,7 +108,7 @@ function get_mamba_env_name_in_current_directory {
 # "mamba env update"
 alias meu='mamba env update -f environment.yml'
 # This abbreviation doesn't make sense but it works in my head
-alias mae='mamba env update -f environment.yml'  
+alias mae='mamba env update -f environment.yml'
 
 # "mamba install"
 alias mi='mamba install -y'
@@ -142,7 +140,6 @@ alias ama='auto_mamba_activate'
 alias md='conda deactivate'
 
 # Navigate the the 'site-packages' folder for a mamba environment
-# TODO (joshua-dean): consider using 'site.getsitepackages()' python call
 function mamba-site-packages() {
     # First check if a variable was passed (environment name)
     if [ "$#" -gt 0 ]; then
@@ -151,7 +148,7 @@ function mamba-site-packages() {
         # If not, use the activated environment
         local ENV_PATH=$CONDA_PREFIX
     fi
-    
+
     # Exit if ENV_PATH isn't set or is empty
     if [ -z "$ENV_PATH" ]; then
         echo "No environment found"
@@ -159,18 +156,9 @@ function mamba-site-packages() {
     fi
 
     local PYTHON_EXEC_PATH=$ENV_PATH/bin/python
-    
-    # Then, get the python version of the environment (this is not the best way to do it)
-    local PYTHON_MAJOR_VERSION
-    local PYTHON_MINOR_VERSION
-    PYTHON_MAJOR_VERSION=$($PYTHON_EXEC_PATH -c "import sys;print(sys.version_info.major)")
-    PYTHON_MINOR_VERSION=$($PYTHON_EXEC_PATH -c "import sys;print(sys.version_info.minor)")
-    
-    # Only one `cd` so that `cd -` still works
-    cd "$ENV_PATH"/lib/python"$PYTHON_MAJOR_VERSION"."$PYTHON_MINOR_VERSION"/site-packages || return
+    cd "$("$PYTHON_EXEC_PATH" -c 'import site;print(site.getsitepackages()[0]);')" || return
 }
 alias msp='mamba-site-packages'
-
 
 # [PyTorch/CUDA Utilities]
 
