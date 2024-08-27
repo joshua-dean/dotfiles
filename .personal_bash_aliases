@@ -30,6 +30,7 @@
 # [lsscsi](https://github.com/doug-gilbert/lsscsi)
 # [neovim](https://github.com/neovim/neovim)
 # [tmux](https://github.com/tmux/tmux)
+# [lazygit](https://github.com/jesseduffield/lazygit)
 
 # [String Manipulation]
 
@@ -109,6 +110,9 @@ alias catmail-recent='tail -n 30 /var/mail/$USER'
 # Reverse Polish Notation Calculator
 alias rpn-calc='orpie'
 alias rpn='orpie'
+
+# Lazygit
+alias lg='lazygit'
 
 # Get the last command executed
 alias last_cmd='fc -ln -1 | strip_whitespace'
