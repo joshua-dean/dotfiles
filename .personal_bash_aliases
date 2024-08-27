@@ -139,13 +139,62 @@ function cd_to_first_directory {
     local target_dir
 
     if [ "$#" == 0 ]; then
-        target_dir=$(find . -maxdepth 1 -mindepth 1 -type d | head -n 1)
+        target_dir=$(find . -maxdepth 1 -mindepth 1 -type d | sort | head -n 1)
     else
-        target_dir=$(find "$1" -maxdepth 1 -mindepth 1 -type d | head -n 1)
+        target_dir=$(find "$1" -maxdepth 1 -mindepth 1 -type d | sort | head -n 1)
     fi
     cd "$target_dir" || return
 }
 alias cdf='cd_to_first_directory'
+
+# Change into a directory with an index
+# If there's not a directory at the index, it just returns
+function cd_to_directory_with_index {
+    local directory_at_index
+
+    directory_at_index=$(find . -maxdepth 1 -mindepth 1 -type d | sort | sed -n "${1}p")
+    cd "$directory_at_index" || return
+}
+alias cdi="cd_to_directory_with_index"
+
+# "smart" change directory
+# Usage: smart-cd [additional-search-paths] [target]
+# or: smart-cd [target]
+# It will search an array of directories for the target directory
+# As soon as a match is found, this will execute the "cd"
+# If a PATH-like variable is passed (':'-delimited paths),
+# All paths will be added to the search dirs
+# TODO (joshua-dean): This should be refactored into it's own script with proper arg parsing
+# TODO (joshua-dean): Tab completion
+function smart-cd {
+    local smart_search_dirs=(
+        "$HOME"
+        "$HOME/Documents"
+    )
+    local target
+    if [ "$#" == 0 ]; then
+        echo "No arguments passed."
+        return
+    elif [ "$#" == 1 ]; then
+        target="$1"
+    elif [ "$#" -ge 2 ]; then
+        # If a path-like variable is passed, parse and add it to the search dirs
+        # '#' gets the length, '-t' ensures we remove the delimiter
+        readarray -d ':' -O "${#smart_search_dirs[@]}" -t smart_search_dirs <<<"$1"
+        target="$2"
+    fi
+    for dir in "${smart_search_dirs[@]}"; do
+        if [ -d "$dir/$target" ]; then
+            cd "$dir/$target" || return
+            return
+        fi
+    done
+    # If we've gotten here, the directory doesn't exist elsewhere
+    # so we can try to "cd" anyways (and let it fail)
+    # shellcheck disable=SC2164
+    cd "$target"
+}
+alias scd='smart-cd'
 
 # [Disk Utilities]
 
