@@ -1,0 +1,179 @@
+#!/bin/bash
+# Personal bash aliases and utility functions for python development
+# There are enough of these to warrant a separate file
+# I primarily use conda environments, with "mamba" for the solver
+
+# Be cautious running any commands with "hammer" in the name -
+# they are all destructive to some degree.
+# Usually they forcibly reinstall packages or rebuilt environments.
+
+# I denote main sections with [Section Name]
+# Current sections are:
+# [General Python Utilities]
+# [Pip Utilities]
+# [Conda/Mamba Utilities]
+# [PyTorch/CUDA Utilities]
+
+# To utilize this, add the following lines to ~/.bashrc:
+# if [ -f ~/.personal_bash_python_utils ]; then
+#    source ~/.personal_bash_python_utils
+# fi
+
+# Dependencies (not needed unless you use the corresponding utilities)
+# Not necessarily a comprehensive list - depends on your system
+# [miniforge3](https://github.com/conda-forge/miniforge)
+
+# [General Python Utilities]
+
+# Get the version of a specific python package
+function python_package_version {
+    python -c "import $1;print($1.__version__);"
+}
+alias pyver='python_package_version'
+
+# Attempts to print out the version of local packages in the current directory
+# Anything with a "_version.py" file gets printed
+# Matches semantic versions only
+# TODO (joshua-dean): Figure out if "tmp" is really needed
+function echo_local_package_versions {
+    local files_to_search_for
+    local version
+    files_to_search_for=(
+        "_version.py"
+    )
+
+    # This structure is a recommendation from the ShellCheck Wiki:
+    # https://www.shellcheck.net/wiki/SC2044
+    # The logic is:
+    #   For each file in the list of files to search for
+    #       For each string matching the semantic version regex
+    #           print the file and the version
+    for search_file in "${files_to_search_for[@]}"; do
+        find . -name "$search_file" > tmp
+        while IFS= read -r file; do
+            version=$(grep -E '__version__ = .+"' "$file" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+            echo "$file": "$version"
+        done < tmp
+        rm tmp
+    done
+}
+alias catver='echo_local_package_versions'
+
+
+# [Pip Utilities]
+
+# Apply this to problematic pip packages
+alias pip-hammer='python -m pip install --upgrade --no-cache-dir --force-reinstall'
+
+
+# [Conda/Mamba Utilities]
+
+# Attempts to locate the conda executable
+# There's a couple distributions that will install to different spots
+# and sometimes there's a valid reason to not add those to $PATH
+# This function prints it's best guess to "stdout"
+function locate_conda {
+    local possible_conda_locations=(
+        "$(which conda)"
+        "$CONDA_EXE"
+        "$HOME"/miniforge3/bin/conda
+        "$HOME"/miniconda3/bin/conda
+        "$HOME"/mamba/bin/conda
+    )
+    for possible_conda_exe in "${possible_conda_locations[@]}"; do
+        if [ -x "$possible_conda_exe" ]; then
+            echo "$possible_conda_exe"
+            return
+        fi
+    done
+}
+
+# Locates and removes the "package cache" directory used by mamba
+# Useful if you killed an in-progress solve
+# and solves are now complaining about the cache 
+function clear_mamba_cache {
+    # Locate the "package cache" directory
+    local package_cache_dir
+    package_cache_dir=$(
+        mamba info | sed -nE '/package cache/ s/^\s+package cache : (.+)$/\1/p'
+    )
+    rm -rf "$package_cache_dir"
+}
+
+# Within the current directory,
+# Finds "environment.yml" and finds the name
+# Used in "auto_" commands that infer the environment
+function get_mamba_env_name_in_current_directory {
+    grep -E 'name: (.+)' environment.yml | cut -d " " -f 2
+}
+
+# "mamba env update"
+alias meu='mamba env update -f environment.yml'
+# This abbreviation doesn't make sense but it works in my head
+alias mae='mamba env update -f environment.yml'  
+
+# "mamba install"
+alias mi='mamba install -y'
+
+# Removes the specific environment,
+# and then re-creates it
+function mamba_hammer {
+    conda deactivate
+    mamba env remove -n "$1"
+    mamba env create environment.yml
+}
+
+# "mamba_hammer" but it auto-detects the environment
+function auto_mamba_hammer {
+    mamba_hammer "$(get_mamba_env_name_in_current_directory)"
+}
+alias amh='auto_mamba_hammer'
+
+# "mamba activate" short
+alias ma='conda activate'
+
+# "mamba activate" but it auto-detects the environment
+function auto_mamba_activate {
+    conda activate "$(get_mamba_env_name_in_current_directory)"
+}
+alias ama='auto_mamba_activate'
+
+# "mamba deactivate"
+alias md='conda deactivate'
+
+# Navigate the the 'site-packages' folder for a mamba environment
+# TODO (joshua-dean): consider using 'site.getsitepackages()' python call
+function mamba-site-packages() {
+    # First check if a variable was passed (environment name)
+    if [ "$#" -gt 0 ]; then
+        local ENV_PATH=/home/josh/mamba/envs/$1
+    else
+        # If not, use the activated environment
+        local ENV_PATH=$CONDA_PREFIX
+    fi
+    
+    # Exit if ENV_PATH isn't set or is empty
+    if [ -z "$ENV_PATH" ]; then
+        echo "No environment found"
+        return
+    fi
+
+    local PYTHON_EXEC_PATH=$ENV_PATH/bin/python
+    
+    # Then, get the python version of the environment (this is not the best way to do it)
+    local PYTHON_MAJOR_VERSION
+    local PYTHON_MINOR_VERSION
+    PYTHON_MAJOR_VERSION=$($PYTHON_EXEC_PATH -c "import sys;print(sys.version_info.major)")
+    PYTHON_MINOR_VERSION=$($PYTHON_EXEC_PATH -c "import sys;print(sys.version_info.minor)")
+    
+    # Only one `cd` so that `cd -` still works
+    cd "$ENV_PATH"/lib/python"$PYTHON_MAJOR_VERSION"."$PYTHON_MINOR_VERSION"/site-packages || return
+}
+alias msp='mamba-site-packages'
+
+
+# [PyTorch/CUDA Utilities]
+
+# Quick check to see if an environment has PyTorch with CUDA
+alias check-torch-cuda='python -c "import torch;print(torch.cuda.is_available());'
+alias ctc='check-torch-cuda'
