@@ -196,6 +196,25 @@ function smart-cd {
 }
 alias scd='smart-cd'
 
+# Change directory to ".." n times
+# Usage: cd-dot-dot [n]
+# Defaults to one if nothing is passed
+function cd-dot-dot {
+    if [ "$#" == 0 ]; then
+        cd ..
+    else
+        # Construct a single target so that "cd -" still works
+        local cd_str=''
+        for _ in $(seq 1 "$1"); do
+            cd_str+='../'
+        done
+        cd "$cd_str" || return
+    fi
+}
+alias cdd='cd-dot-dot'
+# "change directory up"
+alias cdu='cd-dot-dot'
+
 # [Disk Utilities]
 
 # Disk usage summary, human readable
