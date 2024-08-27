@@ -13,6 +13,7 @@
 # Current sections are:
 # [String Manipulation]
 # [General Utilities]
+# [Navigation Utilities]
 # [Disk Utilities]
 # [Process Monitoring]
 # [Networking]
@@ -27,6 +28,8 @@
 # [orpie](https://github.com/pelzlpj/orpie)
 # [xsel](https://github.com/kfish/xsel)
 # [lsscsi](https://github.com/doug-gilbert/lsscsi)
+# [neovim](https://github.com/neovim/neovim)
+# [tmux](https://github.com/tmux/tmux)
 
 # [String Manipulation]
 
@@ -68,7 +71,7 @@ function doublequote {
     fi
 }
 
-# Given a list of arguments, 
+# Given a list of arguments,
 # produce a regex that matches a string containing all of them, in any order.
 # It accomplishes matching in "any order" by matching each argument with positive lookahead
 # Use at your own risk! Many cases of positive lookahead can make a really slow regex.
@@ -82,6 +85,22 @@ function include_list_regex {
 }
 
 # [General Utilities]
+
+# Interfacing with ~/.bashrc
+alias sbrc='source $HOME/.bashrc'
+alias vbrc='neovim $HOME/.bashrc'
+alias cbrc='cat $HOME/.bashrc'
+
+# Source tmux configuration
+alias tmux-source='tmux source $HOME/.tmux.conf'
+
+# Clear screen
+alias cls='clear'
+
+# Cron Utilities (assumes cron logs go to /var/mail)
+alias cronlog='grep CRON /var/log/syslog'
+alias catmail='cat /var/mail/$USER'
+alias catmail-recent='tail -n 30 /var/mail/$USER'
 
 # Reverse Polish Notation Calculator
 alias rpn-calc='orpie'
@@ -108,6 +127,25 @@ alias cwd='pwd | clip'
 function sudo-with-aliases {
     sudo bash --rcfile "$HOME"/.bashrc -ci "$1"
 }
+
+# [Navigation Utilities]
+
+# Go to the local bin
+alias cdbin='cd $HOME/.local/bin'
+
+# Change into the first directory from a parent directory
+# If a path isn't passed, it uses the current directory as the working directory
+function cd_to_first_directory {
+    local target_dir
+
+    if [ "$#" == 0 ]; then
+        target_dir=$(find . -maxdepth 1 -mindepth 1 -type d | head -n 1)
+    else
+        target_dir=$(find "$1" -maxdepth 1 -mindepth 1 -type d | head -n 1)
+    fi
+    cd "$target_dir" || return
+}
+alias cdf='cd_to_first_directory'
 
 # [Disk Utilities]
 
