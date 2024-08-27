@@ -6,7 +6,6 @@ REPO_DIR="$(dirname "$SCRIPT_DIR")"
 
 # If there are no args, print usage
 if [[ $# -eq 0 ]]; then
-
     echo "You must specify either '--hard/-h' or '--symbolic/-s' flag"
     exit 1
 fi
@@ -17,22 +16,22 @@ symbolic_flag=''
 force_flag=''
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        -h|--hard)
-            hard_flag='true'
-            shift
-            ;;
-        -s|--symbolic)
-            symbolic_flag='true'
-            shift
-            ;;
-        -f|--force)
-            force_flag='true'
-            shift
-            ;;
-        *)
-            echo "Unknown argument: $1"
-            exit 1
-            ;;
+    -h | --hard)
+        hard_flag='true'
+        shift
+        ;;
+    -s | --symbolic)
+        symbolic_flag='true'
+        shift
+        ;;
+    -f | --force)
+        force_flag='true'
+        shift
+        ;;
+    *)
+        echo "Unknown argument: $1"
+        exit 1
+        ;;
     esac
 done
 
@@ -62,11 +61,8 @@ if [[ -n "$ln_flags" ]]; then
     ln_flags="${ln_flags% }"
 fi
 
-echo "$ln_flags"
-exit 0
-
 # Make symlinks
-# These are listed in lexicographical order, 
+# These are listed in lexicographical order,
 # files starting with a '.' first,
 # as they would appear from `LC_COLLATE=C ls -1a`
 ln "$ln_flags" "$REPO_DIR"/.gitconfig ~
@@ -74,5 +70,3 @@ ln "$ln_flags" "$REPO_DIR"/.gitignore_global ~
 ln "$ln_flags" "$REPO_DIR"/.inputrc ~
 ln "$ln_flags" "$REPO_DIR"/.tmux.conf ~
 ln "$ln_flags" "$REPO_DIR"/init.vim ~/.config/nvim
-
-
