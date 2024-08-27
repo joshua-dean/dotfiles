@@ -4,9 +4,19 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
 
+# Usage string (based on https://stackoverflow.com/a/51911626)
+__usage="
+Usage: $(basename "$0") [OPTIONS]
+
+Options:
+    -h, --hard      Make hard links
+    -s, --symbolic  Make symbolic links
+    -f, --force     Overwrite existing files
+"
+
 # If there are no args, print usage
 if [[ $# -eq 0 ]]; then
-    echo "You must specify either '--hard/-h' or '--symbolic/-s' flag"
+    echo "$__usage"
     exit 1
 fi
 
@@ -16,6 +26,10 @@ symbolic_flag=''
 force_flag=''
 while [[ $# -gt 0 ]]; do
     case "$1" in
+    --help)
+        echo "$__usage"
+        exit 0
+        ;;
     -h | --hard)
         hard_flag='true'
         shift
