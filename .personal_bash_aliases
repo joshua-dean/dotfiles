@@ -17,6 +17,7 @@
 # [Disk Utilities]
 # [Process Monitoring]
 # [Networking]
+# [Kubernetes]
 
 # To utilize this, add the following lines to ~/.bashrc:
 # if [ -f ~/.personal_bash_aliases ]; then
@@ -276,3 +277,25 @@ function ninjagrep {
 
 # Get the public IP via cloudflare
 alias whoami-cloudflare="dig +short txt ch whoami.cloudflare @1.0.0.1"
+
+# [Kubernetes]
+
+# The general structure I followed during development
+# for configuration files was:
+# First line was a comment with a brief description
+# Second line was a comment containing a command to apply/execute the file
+# This isn't good for production, but was great for development
+# Use at your own risk! Running this on untrusted input could be dangerous
+
+# Get the "kubectl" command from a configuration file
+function get_kube_command {
+    # shellcheck disable=SC2002
+    cat "$1" | sed -n '2p' "$1" | cut -c3-
+}
+alias gkc='get_kube_command'
+
+# Run a "kubectl" command from a configuration file
+function run_kube_command {
+    eval "$(get_kube_command "$1")"
+}
+alias rkc='run_kube_command'
