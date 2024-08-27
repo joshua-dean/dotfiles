@@ -1,0 +1,88 @@
+[user]
+	name = joshua-dean
+	email = alder314@gmail.com
+[core]
+	editor = vim
+	excludesFile = /home/josh/.gitignore_global
+[alias]
+    # Many of these are abbreviations. I spell out the abbreviation in a comment
+    # Several of these won't work without dependencies, such as:
+    # [cloc](https://github.com/AlDanial/cloc)
+    # [xclip](https://github.com/astrand/xclip)
+    # [github-linguist](https://github.com/github-linguist/linguist)
+    
+    # Statistics on all files, including untracked
+	stat = !echo "[Staged]" && git diff --stat --staged && echo "[Unstaged]" && git diff --stat && echo "[Untracked]" && "for next in $( git ls-files --others --exclude-standard ) ; do git --no-pager diff --stat --no-index /dev/null $next; done; "
+
+    # Current Branch, "git rev-parse --abbrev-ref HEAD" also works
+    cb = symbolic-ref --short HEAD
+
+    # Push Origin
+    po = "!git push -u origin \"$(git cb)\""
+
+    # Count Lines of Code
+    cloc = "!cloc $(git ls-files)"
+    
+    # List Modified files
+    lsm = ls-files --modified
+    
+    # Log one line
+    l1 = log -1
+
+    # Log pretty
+    lp = log --pretty=format:'%C(yellow)%h%Creset %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset%Creset %s'
+
+    # Log one line pretty
+    l1p = lp -1
+    lp1 = lp -1
+
+    # Log one line full hash
+    l1phash = log -1 --pretty=format:'%H'
+    l1ph = log -1 --pretty=format:'%H'
+
+    # Log one line short hash
+    l1pshorthash = log -1 --pretty=format:'%h'
+    l1psh = log -1 --pretty=format:'%h'
+    
+    # Copy the short hash to the clipboard (requires xclip) - great for code reviews
+    clipsh = "!git l1psh | xclip -selection clipboard"
+
+    # Log a pretty graph, one line per commit
+    lg1 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)' --all
+    lg = lg1
+    
+    # Log a pretty graph, two lines per commit
+    lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
+    graph = "!git lg2"
+
+    # Run github-linguist
+    ling = !github-linguist
+    
+    # Fetch all remotes and pull the current branch
+    update = !git fetch --all && git pull
+    u = update
+
+    # Deletes local branches that are merged on the remote (https://stackoverflow.com/a/21857717)
+    delete-merged = "!git branch --merged | grep  -v '\\*\\|main\\|master' | xargs -n 1 -r git branch -d"
+    dm = delete-merged
+    
+    # Print a diff of the staged changes
+    diff-cached = diff --cached
+    dc = diff --cached
+    
+    # Unstage all staged changes
+    restore-all = restore --staged .
+    ra = restore-all
+    
+    # Ammend the last commit
+    commit-amend = commit --amend
+    ca = commit-amend
+    
+    # Commit
+    c = commit
+
+    # Tags but sorted (could also pipe to `sort -V`)
+    tags-sorted = tag --sort=creatordate
+    ts = tags-sorted
+[pull]
+	rebase = false
