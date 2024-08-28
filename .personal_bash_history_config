@@ -18,5 +18,5 @@ export HISTSIZE=10000000
 export HISTFILESIZE=100000000
 
 # `history` command formatting
-# e.g. " 1337  01/01/80 00:00:00 rm -rf /"
+# e.g. " 1337  01/01/80 00:00:00 sl"
 export HISTTIMEFORMAT="%d/%m/%y %T "
