@@ -299,3 +299,24 @@ function run_kube_command {
     eval "$(get_kube_command "$1")"
 }
 alias rkc='run_kube_command'
+
+# Delete a "kubectl" command
+# pulls the command from the file and replaces "apply" with "delete"
+function delete_kube_command {
+    local rkc_cmd
+    rkc_cmd=$(get_kube_command "$1")
+    if [[ "$rkc_cmd" == *"apply"* ]]; then
+        eval "${rkc_cmd//apply/delete}"
+    else
+        echo "No 'apply' command found in file."
+    fi
+}
+alias dkc='delete_kube_command'
+
+# Reload a "kubectl" command
+# Deletion and re-application
+function reload_kube_command {
+    delete_kube_command "$1"
+    run_kube_command "$1"
+}
+alias rlkc='reload_kube_command'
