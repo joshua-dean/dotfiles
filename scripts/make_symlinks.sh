@@ -79,6 +79,7 @@ fi
 # These are listed in lexicographical order,
 # files starting with a '.' first,
 # as they would appear from `LC_COLLATE=C ls -1a`
+ln "$ln_flags" "$REPO_DIR"/.editorconfig ~
 ln "$ln_flags" "$REPO_DIR"/.gitconfig ~
 ln "$ln_flags" "$REPO_DIR"/.gitignore_global ~
 ln "$ln_flags" "$REPO_DIR"/.inputrc ~
