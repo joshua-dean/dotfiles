@@ -18,14 +18,14 @@ set indentexpr=""
 set number
 set relativenumber
 
+""" [vim-argwrap](https://git.foosoft.net/alex/vim-argwrap)
+let g:argwrap_tail_comma = 1
+command! AW ArgWrap
 
 """ [Commands]
 " Python Main Block
 command! MainBlock execute "normal! Goif __name__ == \"__main__\":<Esc>opass<Esc>"
 command! MB MainBlock
-
-" Aliases for [vim-argwrap](https://git.foosoft.net/alex/vim-argwrap)
-command! AW ArgWrap
 
 " Expand DocStr
 command! DocStrWrap execute "normal! F\"a<Return><Esc>f\"i<Return><Esc>"
