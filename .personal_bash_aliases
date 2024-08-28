@@ -94,7 +94,7 @@ function include_list_regex {
 
 # Interfacing with ~/.bashrc
 alias sbrc='source $HOME/.bashrc'
-alias vbrc='neovim $HOME/.bashrc'
+alias vbrc='nvim $HOME/.bashrc'
 alias cbrc='cat $HOME/.bashrc'
 
 # Source tmux configuration
