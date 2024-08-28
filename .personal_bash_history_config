@@ -11,6 +11,9 @@
 # Make history append instead of overwrite
 shopt -s histappend
 
+# Ignore duplicates and commands that start with a space
+export HISTCONTROL=ignoreboth
+
 # Number of stored commands in a bash session (10 million commands)
 export HISTSIZE=10000000
 
