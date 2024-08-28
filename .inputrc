@@ -1,1 +1,5 @@
+#!/bin/bash
+# Input settings
+# This file is read by the "readline" library when a new shell is started
+
 set editing-mode vi
