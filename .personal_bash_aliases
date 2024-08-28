@@ -21,7 +21,7 @@
 
 # To utilize this, add the following lines to ~/.bashrc:
 # if [ -f ~/.personal_bash_aliases ]; then
-#    source ~/.personal_bash_aliases
+#     source ~/.personal_bash_aliases
 # fi
 
 # Dependencies (not needed unless you use the corresponding aliases)
