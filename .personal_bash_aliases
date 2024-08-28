@@ -133,7 +133,7 @@ alias cwd='pwd | clip'
 # Thus anything ran this way may work differently than expected.
 # This could also be a security risk if a non-sudo user has access
 # to the sourced `.bashrc`
-function sudo-with-aliases {
+function sudo_with_aliases {
     sudo bash --rcfile "$HOME"/.bashrc -ci "$1"
 }
 
@@ -167,15 +167,15 @@ function cd_to_directory_with_index {
 alias cdi="cd_to_directory_with_index"
 
 # "smart" change directory
-# Usage: smart-cd [additional-search-paths] [target]
-# or: smart-cd [target]
+# Usage: smart_cd [additional-search-paths] [target]
+# or: smart_cd [target]
 # It will search an array of directories for the target directory
 # As soon as a match is found, this will execute the "cd"
 # If a PATH-like variable is passed (':'-delimited paths),
 # All paths will be added to the search dirs
 # TODO (joshua-dean): This should be refactored into it's own script with proper arg parsing
 # TODO (joshua-dean): Tab completion
-function smart-cd {
+function smart_cd {
     local smart_search_dirs=(
         "$HOME"
         "$HOME/Documents"
@@ -203,12 +203,12 @@ function smart-cd {
     # shellcheck disable=SC2164
     cd "$target"
 }
-alias scd='smart-cd'
+alias scd='smart_cd'
 
 # Change directory to ".." n times
-# Usage: cd-dot-dot [n]
+# Usage: cd_dot_dot [n]
 # Defaults to one if nothing is passed
-function cd-dot-dot {
+function cd_dot_dot {
     if [ "$#" == 0 ]; then
         cd ..
     else
@@ -220,9 +220,9 @@ function cd-dot-dot {
         cd "$cd_str" || return
     fi
 }
-alias cdd='cd-dot-dot'
+alias cdd='cd_dot_dot'
 # "change directory up"
-alias cdu='cd-dot-dot'
+alias cdu='cd_dot_dot'
 
 # [Disk Utilities]
 
@@ -231,8 +231,8 @@ alias dush='du -sh *'
 
 # Disconnect and spin down a HDD
 # Use at your own risk!
-# Usage: `disconnect-hdd sdX`
-function disconnect-hdd {
+# Usage: `disconnect_hdd sdX`
+function disconnect_hdd {
     local drive
     drive="$1"
     sudo umount /dev/"$drive"
@@ -245,7 +245,7 @@ function disconnect-hdd {
 # and sees if the hosts show up in `lsscsi`
 # Use at your own risk! The parsing here could definitely go belly-up
 # If you scan an active device, this could interrupt reads/writes
-function scan-inactive-scsi-hosts {
+function scan_inactive_scsi_hosts {
     local host_ids
     local raw_scsi_hosts
 
@@ -262,9 +262,9 @@ function scan-inactive-scsi-hosts {
 # [Process Monitoring]
 
 # awk to pull PID from `ps` (pipe to this, generally)
-# e.g. `ps <some-heinous-condition> | awk-pid`
+# e.g. `ps <some-heinous-condition> | awk_pid`
 # For simple calls, just use `pidof`
-function awk-pid {
+function awk_pid {
     awk '{ print $2 }'
 }
 

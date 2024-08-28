@@ -140,7 +140,7 @@ alias ama='auto_mamba_activate'
 alias md='conda deactivate'
 
 # Navigate the the 'site-packages' folder for a mamba environment
-function mamba-site-packages() {
+function mamba_site_packages() {
     # First check if a variable was passed (environment name)
     if [ "$#" -gt 0 ]; then
         local ENV_PATH=/home/josh/mamba/envs/$1
@@ -158,7 +158,7 @@ function mamba-site-packages() {
     local PYTHON_EXEC_PATH=$ENV_PATH/bin/python
     cd "$("$PYTHON_EXEC_PATH" -c 'import site;print(site.getsitepackages()[0]);')" || return
 }
-alias msp='mamba-site-packages'
+alias msp='mamba_site_packages'
 
 # [PyTorch/CUDA Utilities]
 
