@@ -1,0 +1,22 @@
+#!/bin/bash
+# Personal bash history configuration
+# Don't apply this to machines with very limited space
+# Good reference: https://stackoverflow.com/a/19454838
+
+# To utilize this, add the following lines to ~/.bashrc:
+# if [ -f ~/.personal_bash_history_config ]; then
+#    source ~/.personal_bash_history_config
+# fi
+
+# Make history append instead of overwrite
+shopt -s histappend
+
+# Number of stored commands in a bash session (10 million commands)
+export HISTSIZE=10000000
+
+# History file size (100 million commands)
+export HISTFILESIZE=100000000
+
+# `history` command formatting
+# e.g. " 1337  01/01/80 00:00:00 rm -rf /"
+export HISTTIMEFORMAT="%d/%m/%y %T "
