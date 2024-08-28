@@ -1,3 +1,6 @@
+" Most of my Neovim usage is via vscode,
+" which takes care of many common settings
+
 """ [Pathogen]
 execute pathogen#infect()
 
