@@ -18,8 +18,13 @@ set indentexpr=""
 set number
 set relativenumber
 
-""" [vim-argwrap](https://git.foosoft.net/alex/vim-argwrap)
-let g:argwrap_tail_comma = 1
+""" [vim-argwrap]
+" Upstream: https://git.foosoft.net/alex/vim-argwrap
+" Fork: https://github.com/joshua-dean/vim-argwrap
+
+" Don't wrap for triple quotes (feature from my fork)
+let g:argwrap_tail_comma_braces = '[({'
+
 command! AW ArgWrap
 
 """ [Commands]
