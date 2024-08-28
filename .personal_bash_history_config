@@ -5,7 +5,7 @@
 
 # To utilize this, add the following lines to ~/.bashrc:
 # if [ -f ~/.personal_bash_history_config ]; then
-#    source ~/.personal_bash_history_config
+#     source ~/.personal_bash_history_config
 # fi
 
 # Make history append instead of overwrite
