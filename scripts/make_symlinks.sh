@@ -82,6 +82,7 @@ fi
 ln "$ln_flags" "$REPO_DIR"/.gitconfig ~
 ln "$ln_flags" "$REPO_DIR"/.gitignore_global ~
 ln "$ln_flags" "$REPO_DIR"/.inputrc ~
+ln "$ln_flags" "$REPO_DIR"/.shellcheckrc ~
 ln "$ln_flags" "$REPO_DIR"/.tmux.conf ~
 ln "$ln_flags" "$REPO_DIR"/.vimrc ~
 ln "$ln_flags" "$REPO_DIR"/init.vim ~/.config/nvim
