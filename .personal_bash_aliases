@@ -273,6 +273,15 @@ function ninjagrep {
     grep "$*" | grep -v grep
 }
 
+# Find processes by name (with pgrep), then output full-format info
+# 'ps' won't work if I surround the $(...) with quotes,
+# so I disabled that rule for now.
+function ps_full_format_by_name {
+    # shellcheck disable=SC2046
+    ps -fp $(pgrep "$1")
+}
+alias psf='ps_full_format_by_name'
+
 # [Networking]
 
 # Get the public IP via cloudflare
