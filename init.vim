@@ -36,6 +36,10 @@ command! MB MainBlock
 command! DocStrWrap execute "normal! F\"a<Return><Esc>f\"i<Return><Esc>"
 command! DSW DocStrWrap
 
+" Duplicate and Comment Line
+command! DuplicateAndComment execute "normal! yypkI# <Esc>"
+command! DAC DuplicateAndComment
+
 " Copy all
 command! CPA execute "normal! maggVG\"+y`a<Esc>"
 
