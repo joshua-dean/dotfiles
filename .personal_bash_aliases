@@ -107,6 +107,7 @@ alias cls='clear'
 alias cronlog='grep CRON /var/log/syslog'
 alias catmail='cat /var/mail/$USER'
 alias catmail-recent='tail -n 30 /var/mail/$USER'
+alias tailmail='tail -f /var/mail/$USER'
 
 # Reverse Polish Notation Calculator
 alias rpn-calc='orpie'
