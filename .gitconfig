@@ -84,5 +84,9 @@
     # Tags but sorted (could also pipe to `sort -V`)
     tags-sorted = tag --sort=creatordate
     ts = tags-sorted
+    
+    # Number of commits ahead and behind (must still pass <obj 1>...<obj 2>)
+    ahead-behind = rev-list --left-right --count
+    ab = ahead-behind
 [pull]
 	rebase = false
