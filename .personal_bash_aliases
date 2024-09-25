@@ -225,6 +225,26 @@ alias cdd='cd_dot_dot'
 # "change directory up"
 alias cdu='cd_dot_dot'
 
+# "drill" down through single directories
+# If there is only one subdirectory in the current directory,
+# Repeat the search in the subdirectory.
+# This constructs a single "cd" command so that "cd -" still works
+function drill {
+    local current_dir='.'
+    local find_result
+    while true; do
+        find_result=$(find "$current_dir" -maxdepth 1 -mindepth 1 -type d)
+        if [ -z "$find_result" ] || [ "$(echo "$find_result" | wc -l)" -ne 1 ]; then
+            break
+        fi
+        current_dir="$find_result"
+    done
+
+    if [ "$current_dir" != '.' ]; then
+        cd "$current_dir" || return
+    fi
+}
+
 # [Disk Utilities]
 
 # Disk usage summary, human readable
