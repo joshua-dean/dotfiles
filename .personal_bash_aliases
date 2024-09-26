@@ -249,6 +249,8 @@ function drill {
 
 # Disk usage summary, human readable
 alias dush='du -sh *'
+alias dush-sorted='du -sh * | sort -h'
+alias dushs='dush-sorted'
 
 # Disconnect and spin down a HDD
 # Use at your own risk!
