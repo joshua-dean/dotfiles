@@ -118,7 +118,7 @@ alias mi='mamba install -y'
 function mamba_hammer {
     conda deactivate
     mamba env remove -n "$1"
-    mamba env create environment.yml
+    mamba env create -f environment.yml
 }
 
 # "mamba_hammer" but it auto-detects the environment
