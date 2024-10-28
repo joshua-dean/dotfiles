@@ -6,7 +6,7 @@ User-specific configuration files.
 
 I exclude corporate logic as this is a personal repo.
 Certain dotfiles get named accordingly (e.g. with prefix `.personal_`),
-so they can be included/imported on non-personal machines, _if allowed_.
+so they can be included/imported on non-personal machines, if possible.
 
 It might be useful to put some of these files in their own folder hierarchy.
 
