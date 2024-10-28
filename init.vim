@@ -55,3 +55,19 @@ command! PIQ execute "normal! T\"dt\"\"+P"
 " Yank inside quotes
 command! YIQ execute "normal! T\"vt\"\"+y"
 
+""" [LeetCode Parsing Commands]
+" These are to parse examples/test cases I copy-pasta from LeetCode problems
+" Eventually I'll do this with the GraphQL API, but this is good enough for now
+" Prefixed all of these with "LCP" - "LeetCode Parse"
+
+" Parse "Example" and "Explanation" strings - just remove them
+command! LCPEx execute "%s/\\v(Example|Explanation).*//g"
+
+" Parse "Input" strings - remove prefix and add 4-space indent
+command! LCPIn execute "%s/Input: /    /g"
+
+" Parse "Output" strings - remove prefix and assign to `exp_out`
+command! LCPOut execute "%s/Output: /    exp_out = /g"
+
+" Full parsing
+command! LCP execute "LCPEx" | execute "LCPIn" | execute "LCPOut"
