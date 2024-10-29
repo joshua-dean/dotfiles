@@ -71,3 +71,6 @@ command! LCPOut execute "%s/Output: /    exp_out = /g"
 
 " Full parsing
 command! LCP execute "LCPEx" | execute "LCPIn" | execute "LCPOut"
+
+" Paste and Parse
+command! LCPP execute "normal! \"+P" | execute "LCP"
