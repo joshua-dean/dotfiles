@@ -32,6 +32,10 @@ command! AW ArgWrap
 command! MainBlock execute "normal! Goif __name__ == \"__main__\":<Esc>opass<Esc>"
 command! MB MainBlock
 
+" "Empty" Main Block - no "pass". Leaves cursor at start of first line in the main block
+command! EmptyMainBlock execute "normal! Goif __name__ == \"__main__\":<Esc>o<Esc>"
+command! EMB EmptyMainBlock
+
 " Expand DocStr
 command! DocStrWrap execute "normal! F\"a<Return><Esc>f\"i<Return><Esc>"
 command! DSW DocStrWrap
