@@ -78,3 +78,6 @@ command! LCP execute "LCPEx" | execute "LCPIn" | execute "LCPOut"
 
 " Paste and Parse
 command! LCPP execute "normal! \"+P" | execute "LCP"
+
+" LC Main Block - Create an empty main block, then paste and parse
+command! LCMB execute "EMB" | execute "LCPP"
