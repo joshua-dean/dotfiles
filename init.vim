@@ -59,6 +59,12 @@ command! PIQ execute "normal! T\"dt\"\"+P"
 " Yank inside quotes
 command! YIQ execute "normal! T\"vt\"\"+y"
 
+" Capitalize Booleans (usually when pasting from an external source)
+command! CapTrue execute "%s/true/True/g"
+command! CapFalse execute "%s/false/False/g"
+command! CapBool execute "CapTrue" | execute "CapFalse"
+command! CB CapBool
+
 """ [LeetCode Parsing Commands]
 " These are to parse examples/test cases I copy-pasta from LeetCode problems
 " Eventually I'll do this with the GraphQL API, but this is good enough for now
