@@ -79,8 +79,14 @@ command! LCPIn execute "%s/Input: /    /g"
 " Parse "Output" strings - remove prefix and assign to `exp_out`
 command! LCPOut execute "%s/Output: /    exp_out = /g"
 
+" Split multiple declarations on the same line into their own lines
+" e.g. "m = 3, n = 2" -> "m = 3\rn = 2"
+" Captures leading whitespace to use as an indent on the new line
+command! LCPSplitMultDec execute "%s/\\v^( *)(.*)%(, )(\\w+ = .*)/\\1\\2\r\\1\\3/g"
+command! LCPSMD LCPSplitMultDec
+
 " Full parsing
-command! LCP execute "LCPEx" | execute "LCPIn" | execute "LCPOut"
+command! LCP execute "LCPEx" | execute "LCPIn" | execute "LCPOut" | execute "LCPSMD" | execute "CB"
 
 " Paste and Parse
 command! LCPP execute "normal! \"+P" | execute "LCP"
