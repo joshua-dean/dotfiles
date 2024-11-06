@@ -89,8 +89,12 @@ command! LCPSMD LCPSplitMultDec
 command! LCPClearAfterMainBlock execute "%s/\\v(^.+\"__main__\":)%([ \\r\\n]*)(^ +)/\\1\r\\2/g"
 command! LCPCAMB LCPClearAfterMainBlock
 
+" Clear all but one blank line after each `exp_out = ...`
+command! LCPClearAfterExpOut execute "%s/\\v(^.+exp_out = .+$)%([ \\r\\n]*)(^ +)/\\1\r\r\\2/g"
+command! LCPCAEO LCPClearAfterExpOut
+
 " Full parsing
-command! LCP execute "LCPEx" | execute "LCPIn" | execute "LCPOut" | execute "LCPSMD" | execute "CB" | execute "LCPCAMB"
+command! LCP execute "LCPEx" | execute "LCPIn" | execute "LCPOut" | execute "LCPSMD" | execute "CB" | execute "LCPCAMB" | execute "LCPCAEO"
 
 " Paste and Parse
 command! LCPP execute "normal! \"+P" | execute "LCP"
