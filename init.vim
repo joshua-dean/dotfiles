@@ -85,8 +85,12 @@ command! LCPOut execute "%s/Output: /    exp_out = /g"
 command! LCPSplitMultDec execute "%s/\\v^( *)(.*)%(, )(\\w+ = .*)/\\1\\2\r\\1\\3/g"
 command! LCPSMD LCPSplitMultDec
 
+" Clear blank lines after the main block
+command! LCPClearAfterMainBlock execute "%s/\\v(^.+\"__main__\":)%([ \\r\\n]*)(^ +)/\\1\r\\2/g"
+command! LCPCAMB LCPClearAfterMainBlock
+
 " Full parsing
-command! LCP execute "LCPEx" | execute "LCPIn" | execute "LCPOut" | execute "LCPSMD" | execute "CB"
+command! LCP execute "LCPEx" | execute "LCPIn" | execute "LCPOut" | execute "LCPSMD" | execute "CB" | execute "LCPCAMB"
 
 " Paste and Parse
 command! LCPP execute "normal! \"+P" | execute "LCP"
