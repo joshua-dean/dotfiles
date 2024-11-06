@@ -85,6 +85,17 @@ command! LCPOut execute "%s/Output: /    exp_out = /g"
 command! LCPSplitMultDec execute "%s/\\v^( *)(.*)%(, )(\\w+ = .*)/\\1\\2\r\\1\\3/g"
 command! LCPSMD LCPSplitMultDec
 
+" Commands that achieve valid syntax
+" This won't necessarily work if the question has multi-line explanations,
+" but it will get close
+function LCPValidSyntax()
+    silent! execute "LCPEx"
+    silent! execute "LCPIn"
+    silent! execute "LCPOut"
+    silent! execute "LCPSMD"
+    silent! execute "CB"
+endfunction
+
 " Clear blank lines after the main block
 command! LCPClearAfterMainBlock execute "%s/\\v(^.+\"__main__\":)%([ \\r\\n]*)(^ +)/\\1\r\\2/g"
 command! LCPCAMB LCPClearAfterMainBlock
@@ -93,16 +104,11 @@ command! LCPCAMB LCPClearAfterMainBlock
 command! LCPClearAfterExpOut execute "%s/\\v(^.+exp_out = .+$)%([ \\r\\n]*)(^ +)/\\1\r\r\\2/g"
 command! LCPCAEO LCPClearAfterExpOut
 
-" Commands that achieve valid syntax
-" This won't necessarily work if the question has multi-line explanations,
-" but it will get close
-command! LCPValidSyntax execute "LCPEx" | execute "LCPIn" | execute "LCPOut" | execute "LCPSMD" | execute "CB"
-
 " Commands that format things to look nicer, after syntax parsing
 command! LCPFormat execute "LCPCAMB" | execute "LCPCAEO"
 
 " Full parsing
-command! LCP execute "LCPValidSyntax" | execute "LCPFormat"
+command! LCP execute "call LCPValidSyntax()" | execute "LCPFormat"
 
 " Paste and Parse
 command! LCPP execute "normal! \"+P" | execute "LCP"
