@@ -93,8 +93,16 @@ command! LCPCAMB LCPClearAfterMainBlock
 command! LCPClearAfterExpOut execute "%s/\\v(^.+exp_out = .+$)%([ \\r\\n]*)(^ +)/\\1\r\r\\2/g"
 command! LCPCAEO LCPClearAfterExpOut
 
+" Commands that achieve valid syntax
+" This won't necessarily work if the question has multi-line explanations,
+" but it will get close
+command! LCPValidSyntax execute "LCPEx" | execute "LCPIn" | execute "LCPOut" | execute "LCPSMD" | execute "CB"
+
+" Commands that format things to look nicer, after syntax parsing
+command! LCPFormat execute "LCPCAMB" | execute "LCPCAEO"
+
 " Full parsing
-command! LCP execute "LCPEx" | execute "LCPIn" | execute "LCPOut" | execute "LCPSMD" | execute "CB" | execute "LCPCAMB" | execute "LCPCAEO"
+command! LCP execute "LCPValidSyntax" | execute "LCPFormat"
 
 " Paste and Parse
 command! LCPP execute "normal! \"+P" | execute "LCP"
