@@ -115,3 +115,17 @@ command! LCPP execute "normal! \"+P" | execute "LCP"
 
 " LC Main Block - Create an empty main block, then paste and parse
 command! LCMB execute "EMB" | execute "LCPP"
+
+""" [LeetCode Utils]
+" Other LeetCode utilities
+
+" Select all lines of code from the first valid up to (but not including) the main block
+" This should just be the actual solution code, for pasting into the browser
+" '=' have to be escaped otherwise `vscode-neovim` has a fit, so I just shortened the second pattern
+command! LCSelect execute "normal! gg/\"\"\"/<CR>jV/if __name__/<CR>k"
+command! LCS LCSelect
+
+" Select and copy all lines of code
+command! LCCopy execute "LCSelect" | execute "normal! \"+y"
+command! LCC LCCopy
+
