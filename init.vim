@@ -65,6 +65,12 @@ command! CapFalse execute "%s/false/False/g"
 command! CapBool execute "CapTrue" | execute "CapFalse"
 command! CB CapBool
 
+" Wrap in print (python)
+command! WIP execute "normal! ^iprint(<Esc>A)<Esc>"
+" Unwrap in print (python) - puts whatever it wrapped on a separate line
+" not working correctly rn TODO debug this
+" command! UWIP execute "normal! ^iprint(<Enter><Esc>o)"
+
 """ [LeetCode Parsing Commands]
 " These are to parse examples/test cases I copy-pasta from LeetCode problems
 " Eventually I'll do this with the GraphQL API, but this is good enough for now
