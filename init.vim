@@ -65,6 +65,10 @@ command! CapFalse execute "%s/false/False/g"
 command! CapBool execute "CapTrue" | execute "CapFalse"
 command! CB CapBool
 
+" Coerce `null` to `None` (usually when pasting from an external source)
+command CoerceNull execute "%s/null/None/g"
+command CN CoerceNull
+
 " Wrap in print (python)
 command! WIP execute "normal! ^iprint(<Esc>A)<Esc>"
 " Unwrap in print (python) - puts whatever it wrapped on a separate line
@@ -100,6 +104,7 @@ function LCPValidSyntax()
     silent! execute "LCPOut"
     silent! execute "LCPSMD"
     silent! execute "CB"
+    silent! execute "CN"
 endfunction
 
 " Clear blank lines after the main block
