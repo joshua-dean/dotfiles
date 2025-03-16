@@ -75,6 +75,17 @@ command! WIP execute "normal! ^iprint(<Esc>A)<Esc>"
 " not working correctly rn TODO debug this
 " command! UWIP execute "normal! ^iprint(<Enter><Esc>o)"
 
+
+" 'Best Effort' Split (python, LeetCode)
+" Given multiple valid assignment statements on a line, break them into their own lines. e.g.
+" a = [3, 4, 5], b = [3, 4, 5]
+" goes to
+" a = [3, 4, 5]
+" b = [3, 4, 5]
+" This is tricky as commas enclosed by brackets/parentheses shouldn't get expanded
+" Restricting this to a single line so it doesn't go sicko mode on me
+command! BES execute "s/\\v(, )(\\w+ =)/\r    \\2/g"
+
 """ [LeetCode Parsing Commands]
 " These are to parse examples/test cases I copy-pasta from LeetCode problems
 " Eventually I'll do this with the GraphQL API, but this is good enough for now
