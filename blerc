@@ -2,10 +2,16 @@
 
 # Persistent status bar on the terminal's last line: vi mode on the left, user@host on the right
 bleopt prompt_status_line='\q{keymap:vi/mode-indicator}\r\u@\h'
-bleopt keymap_vi_mode_string_nmap='-- NORMAL --'
 
-# Cursor shape per vi mode (DECSCUSR codes): blinking bar while inserting, steady block otherwise
-bleopt keymap_vi_imap_cursor=5
-bleopt keymap_vi_nmap_cursor=2
-bleopt keymap_vi_xmap_cursor=2
-bleopt keymap_vi_omap_cursor=4
+# Vi settings must wait for ble.sh to (lazily) load its vi keymap, which resets them otherwise
+function blerc/vi-load-hook {
+  bleopt keymap_vi_mode_string_nmap='-- NORMAL --'
+  # Cursor shape per mode (DECSCUSR codes): blinking bar while inserting, steady block otherwise
+  ble-bind -m vi_imap --cursor 5
+  ble-bind -m vi_nmap --cursor 2
+  ble-bind -m vi_xmap --cursor 2
+  ble-bind -m vi_omap --cursor 4
+  # The mode is in the status bar, so clear the duplicate ble.sh always writes under the prompt
+  ble/function#advice after ble/keymap:vi/update-mode-indicator 'ble/edit/info/default text ""'
+}
+blehook/eval-after-load keymap_vi blerc/vi-load-hook

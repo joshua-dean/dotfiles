@@ -29,7 +29,10 @@
         }
     ],
     "profiles": {
-        "defaults": {},
+        "defaults": {
+            "padding": "0",
+            "scrollbarState": "hidden"
+        },
         "list": [
             {
                 "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
