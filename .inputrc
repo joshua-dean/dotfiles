@@ -6,3 +6,6 @@
 $include /etc/inputrc
 
 set editing-mode vi
+
+# How long (ms) to wait after Esc for a longer key sequence; the 500 default makes Esc feel laggy
+set keyseq-timeout 25

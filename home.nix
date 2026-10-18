@@ -14,6 +14,13 @@ let
     ".personal_bash_aliases"
     ".personal_bash_python_utils"
   ];
+  # Bash/zsh port of PowerShell's posh-git prompt: `~/code/dotfiles [main ≡ +0 ~1 -0 | +1 ~0 -0 !]> `
+  poshGitSh = pkgs.fetchFromGitHub {
+    owner = "lyze";
+    repo = "posh-git-sh";
+    rev = "0de03f92f4d0a31333b7c3d6d103b6c09c0ee57e";
+    hash = "sha256-1uPpnrUGMoG83onuxXxQo2/ShRoEMSLHmRKuJI2Hfm8=";
+  };
 in
 {
   home.stateVersion = "26.05";
@@ -21,12 +28,33 @@ in
     gh
     tmux
     neovim
+    vim # .gitconfig core.editor
     jq
     yq
-    uv
+    (callPackage ./pkgs/uv.nix { })
     rustup
     gcc
+    nixfmt
+    lazygit
+    shellcheck # .shellcheckrc
+    xclip # clipsh/clip aliases (via WSLg)
+    xsel # cpl alias
+    cloc # git cloc
+    dnsutils # dig, for whoami-cloudflare
+    orpie # rpn aliases
   ];
+
+  # Plugin managers init.vim expects; vim-repl still installs via :PlugInstall
+  xdg.dataFile = {
+    "nvim/site/autoload/plug.vim".source = "${pkgs.vimPlugins.vim-plug}/plug.vim";
+    "nvim/site/autoload/pathogen.vim".source = "${pkgs.vimPlugins.vim-pathogen}/autoload/pathogen.vim";
+    "nvim/site/bundle/vim-argwrap".source = pkgs.fetchFromGitHub {
+      owner = "joshua-dean";
+      repo = "vim-argwrap";
+      rev = "2903f9ea3e905aefdefbd10624c97ba1b7ed99a9";
+      hash = "sha256-1O8GcyC+R6EpKlW/5RXSEuxsmvxaloDA/cXMCvG6org=";
+    };
+  };
 
   # Same manifest scripts/link.py uses elsewhere; `linux` overrides `all`, both are ~/ paths
   home.file = lib.concatMapAttrs (
@@ -48,13 +76,24 @@ in
 
   programs.bash = {
     enable = true;
-    initExtra = sourceAliases + sourceIf [ ".personal_bash_history_config" ];
+    initExtra =
+      sourceAliases
+      + sourceIf [ ".personal_bash_history_config" ]
+      + ''
+        source ${poshGitSh}/git-prompt.sh
+        # Args: prefix, suffix, then text around the git status (only shown inside a repo)
+        PROMPT_COMMAND='__posh_git_ps1 "\w" "> " " " "";'"''${PROMPT_COMMAND:-}"
+      '';
   };
   programs.zsh = {
     enable = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-    initContent = sourceAliases;
+    # KEYTIMEOUT is in 10ms units (default 40); keeps Esc into vi normal mode snappy
+    initContent = sourceAliases + ''
+      KEYTIMEOUT=1
+      source ${poshGitSh}/git-prompt.sh
+      precmd() { __posh_git_ps1 '%~' '> ' ' ' '''; }
+    '';
   };
-  programs.starship.enable = true; # git-aware prompt for both shells
 }
