@@ -11,3 +11,6 @@
   - `PreToolUse` hook (matcher `Bash|PowerShell`) blocks any command matching it
   - Keep a few `deny` rules as backup if hooks get disabled
   - Add `mcp__*` deny entries separately for MCP tools
+- [ ] Repo-aware gray autosuggestions via Atuin
+  - Custom ble.sh auto-complete source querying `atuin search` (workspace filter, prefix mode)
+  - Measure per-keystroke latency first; fall back to ble.sh history if slow
