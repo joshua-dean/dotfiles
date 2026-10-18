@@ -7,5 +7,6 @@ $include /etc/inputrc
 
 set editing-mode vi
 
-# How long (ms) to wait after Esc for a longer key sequence; the 500 default makes Esc feel laggy
-set keyseq-timeout 25
+# How long (ms) to wait after Esc for a longer key sequence; the 500 default makes Esc feel laggy.
+# 1 is the minimum (0 waits forever); fine locally, but arrow keys may misfire over slow SSH links
+set keyseq-timeout 1
