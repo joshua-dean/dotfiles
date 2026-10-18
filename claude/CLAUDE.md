@@ -29,6 +29,8 @@ Multi-line docstrings must not leave any content on the starting line.
 LLM-written code must append: `Authored by Claude <model> - <effort level>`
 e.g. `Authored by Claude Opus 5.5 - Effort: Medium`.
 
+Check your settings for effort level - do not guess.
+
 If an entire file or module is written, write this at the end of the top docstring.
 
 If a function is appended to an existing file,
