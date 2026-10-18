@@ -1,13 +1,29 @@
 " Most of my Neovim usage is via vscode,
 " which takes care of many common settings
 
-""" [Pathogen]
-execute pathogen#infect()
-
 """ [vim-plug]
+" Bootstraps itself: fetches plug.vim if missing (Home Manager provides it on NixOS),
+" then installs any missing plugins on startup (skipped inside VS Code)
+let s:plug_vim = stdpath('data') . '/site/autoload/plug.vim'
+if empty(glob(s:plug_vim))
+  " List form runs curl directly, avoiding shell quoting differences (cmd, bash, ...)
+  call system(['curl', '-fsSLo', s:plug_vim, '--create-dirs',
+    \ 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'])
+  " Source it now: nvim won't find a just-created autoload file until restart
+  execute 'source' fnameescape(s:plug_vim)
+endif
+
 call plug#begin()
 Plug 'sillybun/vim-repl'
+Plug 'joshua-dean/vim-argwrap'
 call plug#end()
+
+let s:vimrc = expand('<sfile>:p')
+if !exists('g:vscode')
+  autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+    \| PlugInstall --sync | execute 'source' fnameescape(s:vimrc)
+    \| endif
+endif
 " REPLToggle bind
 nnoremap <leader>r :REPLToggle<Cr>
 

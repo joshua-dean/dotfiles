@@ -54,6 +54,11 @@ source = "claude/CLAUDE.md"
 description = "Claude Code global instructions"
 all = "~/.claude/CLAUDE.md"
 
+[windows_terminal]
+source = "windows-terminal/settings.json"
+description = "Windows Terminal settings (profiles, keybindings)"
+windows = "{localappdata}/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json"
+
 [claude_settings]
 source = "claude/settings.json"
 description = "Claude Code user settings (deny rules for destructive gh/git commands)"

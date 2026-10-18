@@ -44,17 +44,8 @@ in
     orpie # rpn aliases
   ];
 
-  # Plugin managers init.vim expects; vim-repl still installs via :PlugInstall
-  xdg.dataFile = {
-    "nvim/site/autoload/plug.vim".source = "${pkgs.vimPlugins.vim-plug}/plug.vim";
-    "nvim/site/autoload/pathogen.vim".source = "${pkgs.vimPlugins.vim-pathogen}/autoload/pathogen.vim";
-    "nvim/site/bundle/vim-argwrap".source = pkgs.fetchFromGitHub {
-      owner = "joshua-dean";
-      repo = "vim-argwrap";
-      rev = "2903f9ea3e905aefdefbd10624c97ba1b7ed99a9";
-      hash = "sha256-1O8GcyC+R6EpKlW/5RXSEuxsmvxaloDA/cXMCvG6org=";
-    };
-  };
+  # vim-plug for init.vim, which installs its plugins itself on first launch
+  xdg.dataFile."nvim/site/autoload/plug.vim".source = "${pkgs.vimPlugins.vim-plug}/plug.vim";
 
   # Same manifest scripts/link.py uses elsewhere; `linux` overrides `all`, both are ~/ paths
   home.file = lib.concatMapAttrs (
