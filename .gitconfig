@@ -4,6 +4,11 @@
 [core]
 	editor = vim
 	excludesFile = ~/.gitignore_global
+# GitHub HTTPS auth via the gh CLI's login (`gh auth login`), on every platform.
+# The empty helper clears inherited ones (e.g. Git Credential Manager on Windows).
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
 [alias]
     # Many of these are abbreviations. I spell out the abbreviation in a comment
     # Several of these won't work without dependencies, such as:
