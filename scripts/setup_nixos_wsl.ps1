@@ -22,6 +22,14 @@ if (-not ((wsl -l -q) -replace "`0" -contains $Distro)) {
     Remove-Item $img
 }
 
-# 4. TODO: install dotfiles inside the distro (approach pending)
-wsl --shutdown  # apply .wslconfig
+# 4. Apply the flake straight from GitHub (no git needed yet). Uses `boot` + restart
+#    because it renames the default user (nixos -> josh), per the NixOS-WSL docs.
+$flake = "github:joshua-dean/dotfiles/nixos-wsl#nixos"
+wsl -d $Distro -- sudo nixos-rebuild boot --flake $flake --option experimental-features "nix-command flakes"
+wsl --shutdown  # also applies .wslconfig
+wsl -d $Distro --user root exit
+wsl -t $Distro
+
+# 5. Clone the repo inside WSL; Home Manager's symlinks point at this checkout
+wsl -d $Distro -- bash -c 'git clone -b nixos-wsl https://github.com/joshua-dean/dotfiles ~/code/dotfiles'
 Write-Host "Done. Start with: wsl -d $Distro"
