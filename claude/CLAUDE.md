@@ -17,3 +17,19 @@
   - A multiplier scales it, e.g. "2x succ" means rewrite it at half the length
 - "mega succ": one line
 - "omega succ": only a few words
+
+## Python Conventions
+
+### Docstrings
+
+Multi-line docstrings must not leave any content on the starting line.
+
+### Model Attribution Strings
+
+LLM-written code must append: `Authored by Claude <model> - <effort level>`
+e.g. `Authored by Claude Opus 5.5 - Effort: Medium`.
+
+If an entire file or module is written, write this at the end of the top docstring.
+
+If a function is appended to an existing file,
+write this at the end of the function docstring in the abscence of the module-level attribution.
