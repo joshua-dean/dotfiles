@@ -100,4 +100,19 @@ in
       precmd() { __posh_git_ps1 '%~' '> ' ' ' '''; }
     '';
   };
+
+  # Shell history in SQLite with context (directory, git repo, exit code, duration).
+  # Ctrl-R searches it; inside a git repo it starts filtered to that repo (Ctrl-R cycles filters).
+  programs.atuin = {
+    enable = true;
+    flags = [ "--disable-up-arrow" ]; # keep Up/k as plain history for vi mode
+    settings = {
+      workspaces = true; # in a git repo, default to that repo's history
+      filter_mode = "global"; # elsewhere, everything
+      auto_sync = false; # local only
+      update_check = false;
+      style = "compact";
+      inline_height = 20; # show below the prompt instead of taking over the screen
+    };
+  };
 }

@@ -14,8 +14,25 @@ function blerc/vi-load-hook {
   ble-bind -m vi_omap --cursor 4
   # The mode is in the status bar, so clear the duplicate ble.sh always writes under the prompt
   ble/function#advice after ble/keymap:vi/update-mode-indicator 'ble/edit/info/default text ""'
+  # F2 opens the completion list
+  ble-bind -m vi_imap -f f2 'complete enter_menu'
 }
 blehook/eval-after-load keymap_vi blerc/vi-load-hook
+
+# Restore the line and erase the drawn list (the built-in cancel leaves the list on screen)
+function ble/widget/blerc/menu-close {
+  ble/widget/menu_complete/cancel
+  ble/complete/menu/clear
+}
+
+# Completion keys, set once ble.sh loads its (lazy) completion keymaps
+function blerc/complete-load-hook {
+  # F2 again closes the list (Shift+Tab keeps its default there: previous item)
+  ble-bind -m menu_complete -f f2 blerc/menu-close
+  # Shift+Tab accepts the gray suggestion shown while typing
+  ble-bind -m auto_complete -f S-TAB auto_complete/insert
+}
+blehook/eval-after-load complete blerc/complete-load-hook
 
 # Load the vi keymap now (it's lazy otherwise), or the first prompt's bar shows the unexpanded \q{...}
 ble-import keymap/vi
