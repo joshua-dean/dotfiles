@@ -53,3 +53,8 @@ windows = "{localappdata}/nvim/init.vim"
 source = "claude/CLAUDE.md"
 description = "Claude Code global instructions"
 all = "~/.claude/CLAUDE.md"
+
+[claude_settings]
+source = "claude/settings.json"
+description = "Claude Code user settings (deny rules for destructive gh/git commands)"
+all = "~/.claude/settings.json"

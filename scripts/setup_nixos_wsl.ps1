@@ -31,7 +31,7 @@ if (-not ((wsl -l -q) -replace "`0" -contains $Distro)) {
 # 4. Apply the flake straight from GitHub (no git needed yet). Uses `boot` + restart
 #    because it renames the default user (nixos -> josh), per the NixOS-WSL docs.
 $flake = "github:joshua-dean/dotfiles/nixos-wsl#nixos"
-Invoke-Wsl -d $Distro -- sudo nixos-rebuild boot --flake $flake --option experimental-features "nix-command flakes"
+Invoke-Wsl -d $Distro -- sudo nixos-rebuild boot --refresh --flake $flake --option experimental-features "nix-command flakes"
 wsl --shutdown  # also applies .wslconfig
 wsl -d $Distro --user root exit
 wsl -t $Distro
