@@ -1,7 +1,8 @@
 # ble.sh settings (bash line editor, enabled on NixOS). Linked to ~/.blerc; see links.toml.
 
-# Persistent status bar on the terminal's last line: vi mode on the left, user@host on the right
-bleopt prompt_status_line='\q{keymap:vi/mode-indicator}\r\u@\h'
+# Persistent status bar on the terminal's last line: vi mode on the left, user@host on the right,
+# with a space of padding at each edge
+bleopt prompt_status_line=' \q{keymap:vi/mode-indicator}\r\u@\h '
 
 # Vi settings must wait for ble.sh to (lazily) load its vi keymap, which resets them otherwise
 function blerc/vi-load-hook {
@@ -15,3 +16,6 @@ function blerc/vi-load-hook {
   ble/function#advice after ble/keymap:vi/update-mode-indicator 'ble/edit/info/default text ""'
 }
 blehook/eval-after-load keymap_vi blerc/vi-load-hook
+
+# Load the vi keymap now (it's lazy otherwise), or the first prompt's bar shows the unexpanded \q{...}
+ble-import keymap/vi
