@@ -87,3 +87,5 @@ ln "$ln_flags" "$REPO_DIR"/.shellcheckrc ~
 ln "$ln_flags" "$REPO_DIR"/.tmux.conf ~
 ln "$ln_flags" "$REPO_DIR"/.vimrc ~
 ln "$ln_flags" "$REPO_DIR"/init.vim ~/.config/nvim
+mkdir -p ~/.claude
+ln "$ln_flags" "$REPO_DIR"/claude/CLAUDE.md ~/.claude
