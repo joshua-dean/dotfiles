@@ -3,7 +3,7 @@
 	email = alder314@gmail.com
 [core]
 	editor = vim
-	excludesFile = /home/josh/.gitignore_global
+	excludesFile = ~/.gitignore_global
 [alias]
     # Many of these are abbreviations. I spell out the abbreviation in a comment
     # Several of these won't work without dependencies, such as:

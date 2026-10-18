@@ -1,0 +1,22 @@
+# Environment for type-checking and linting scripts/ (the scripts declare their own deps via PEP 723)
+[project]
+name = "dotfiles"
+version = "0.0.0"
+requires-python = ">=3.14"
+
+[dependency-groups]
+# Keep in sync with the PEP 723 block in scripts/link.py
+type-checking = [
+    "typer>=0.15",
+    "prompt-toolkit>=3.0.52",
+    "platformdirs>=4.3",
+]
+dev = [
+    "ty>=0.0.89",
+    "ruff>=0.17.1",
+]
+
+[tool.uv]
+required-version = ">=0.13.1"
+package = false
+default-groups = "all"

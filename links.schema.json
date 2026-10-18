@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Dotfiles link manifest",
+  "description": "Maps files in this repo to where each platform expects them. Each top-level table is one entry, keyed by a short name. Read by scripts/link.py, and by home.nix on NixOS.",
+  "type": "object",
+  "additionalProperties": { "$ref": "#/definitions/entry" },
+  "definitions": {
+    "entry": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "File to link, relative to the repo root."
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional note about the entry."
+        },
+        "all": {
+          "$ref": "#/definitions/homeTargets",
+          "description": "Target(s) on every platform without its own key. Must start with ~/ since Linux (Home Manager) uses it too."
+        },
+        "linux": {
+          "$ref": "#/definitions/homeTargets",
+          "description": "Target(s) on Linux, including WSL. Overrides `all`. Must start with ~/ so Home Manager can use it."
+        },
+        "macos": {
+          "$ref": "#/definitions/targets",
+          "description": "Target(s) on macOS. Overrides `all`."
+        },
+        "windows": {
+          "$ref": "#/definitions/targets",
+          "description": "Target(s) on Windows. Overrides `all`."
+        }
+      },
+      "required": ["source"],
+      "anyOf": [
+        { "required": ["all"] },
+        { "required": ["linux"] },
+        { "required": ["macos"] },
+        { "required": ["windows"] }
+      ],
+      "additionalProperties": false
+    },
+    "targets": {
+      "description": "A path or list of paths. May start with ~/ and use placeholders: {home}, {config} (platformdirs user_config_dir), {localappdata}, {appdata}, {documents} (follows OneDrive redirection).",
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1
+        }
+      ]
+    },
+    "homeTargets": {
+      "description": "A path or list of paths, each starting with ~/ (no placeholders).",
+      "oneOf": [
+        { "type": "string", "pattern": "^~/" },
+        {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^~/" },
+          "minItems": 1
+        }
+      ]
+    }
+  }
+}

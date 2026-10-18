@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   # Link to the live checkout (not the Nix store) so edits apply without a rebuild
   repo = "${config.home.homeDirectory}/code/dotfiles";
@@ -23,30 +28,23 @@ in
     gcc
   ];
 
-  home.file =
-    builtins.listToAttrs (
-      map
-        (f: {
-          name = f;
-          value.source = link f;
-        })
-        [
-          ".editorconfig"
-          ".gitconfig"
-          ".gitignore_global"
-          ".inputrc"
-          ".shellcheckrc"
-          ".tmux.conf"
-          ".vimrc"
-          ".personal_bash_aliases"
-          ".personal_bash_history_config"
-          ".personal_bash_python_utils"
-        ]
+  # Same manifest scripts/link.py uses elsewhere; `linux` overrides `all`, both are ~/ paths
+  home.file = lib.concatMapAttrs (
+    name: entry:
+    let
+      targets = entry.linux or entry.all or [ ];
+    in
+    lib.listToAttrs (
+      map (target: {
+        name =
+          if lib.hasPrefix "~/" target then
+            lib.removePrefix "~/" target
+          else
+            throw "links.toml [${name}]: Linux targets must start with ~/ (got ${target})";
+        value.source = link entry.source;
+      }) (lib.toList targets)
     )
-    // {
-      ".claude/CLAUDE.md".source = link "claude/CLAUDE.md";
-    };
-  xdg.configFile."nvim/init.vim".source = link "init.vim";
+  ) (builtins.fromTOML (builtins.readFile ./links.toml));
 
   programs.bash = {
     enable = true;

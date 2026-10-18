@@ -1,0 +1,55 @@
+#:schema ./links.schema.json
+# Where each dotfile goes, per platform. See links.schema.json for the format.
+# Applied by `uv run scripts/link.py`, and by home.nix on NixOS.
+
+[editorconfig]
+source = ".editorconfig"
+all = "~/.editorconfig"
+
+[gitconfig]
+source = ".gitconfig"
+all = "~/.gitconfig"
+
+[gitignore_global]
+source = ".gitignore_global"
+all = "~/.gitignore_global"
+
+[inputrc]
+source = ".inputrc"
+all = "~/.inputrc"
+
+[shellcheckrc]
+source = ".shellcheckrc"
+all = "~/.shellcheckrc"
+
+[tmux]
+source = ".tmux.conf"
+linux = "~/.tmux.conf"
+macos = "~/.tmux.conf"
+
+[vimrc]
+source = ".vimrc"
+all = "~/.vimrc"
+
+[bash_aliases]
+source = ".personal_bash_aliases"
+all = "~/.personal_bash_aliases"
+
+[bash_history_config]
+source = ".personal_bash_history_config"
+all = "~/.personal_bash_history_config"
+
+[bash_python_utils]
+source = ".personal_bash_python_utils"
+all = "~/.personal_bash_python_utils"
+
+[nvim]
+source = "init.vim"
+linux = "~/.config/nvim/init.vim"
+macos = "~/.config/nvim/init.vim"
+windows = "{localappdata}/nvim/init.vim"
+
+[claude]
+source = "claude/CLAUDE.md"
+description = "Claude Code global instructions"
+all = "~/.claude/CLAUDE.md"

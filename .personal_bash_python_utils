@@ -143,7 +143,7 @@ alias md='conda deactivate'
 function mamba_site_packages() {
     # First check if a variable was passed (environment name)
     if [ "$#" -gt 0 ]; then
-        local ENV_PATH=/home/josh/mamba/envs/$1
+        local ENV_PATH="$HOME"/mamba/envs/$1
     else
         # If not, use the activated environment
         local ENV_PATH=$CONDA_PREFIX

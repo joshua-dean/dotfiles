@@ -2,4 +2,7 @@
 # Input settings
 # This file is read by the "readline" library when a new shell is started
 
+# Keep the system defaults (e.g. Git for Windows ships useful ones), then override
+$include /etc/inputrc
+
 set editing-mode vi
