@@ -80,6 +80,8 @@ in
       sourceAliases
       + sourceIf [ ".personal_bash_history_config" ]
       + ''
+        # `wsl` starts in the Windows folder it was run from; start fresh login shells in ~ instead
+        if shopt -q login_shell && [[ $PWD == /mnt/* ]]; then cd ~; fi
         source ${poshGitSh}/git-prompt.sh
         # Args: prefix, suffix, then text around the git status (only shown inside a repo)
         PROMPT_COMMAND='__posh_git_ps1 "\w" "> " " " "";'"''${PROMPT_COMMAND:-}"
@@ -92,6 +94,8 @@ in
     # KEYTIMEOUT is in 10ms units (default 40); keeps Esc into vi normal mode snappy
     initContent = sourceAliases + ''
       KEYTIMEOUT=1
+      # `wsl` starts in the Windows folder it was run from; start fresh login shells in ~ instead
+      if [[ -o login && $PWD == /mnt/* ]]; then cd ~; fi
       source ${poshGitSh}/git-prompt.sh
       precmd() { __posh_git_ps1 '%~' '> ' ' ' '''; }
     '';
