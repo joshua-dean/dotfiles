@@ -27,6 +27,11 @@ source = ".tmux.conf"
 linux = "~/.tmux.conf"
 macos = "~/.tmux.conf"
 
+[blerc]
+source = "blerc"
+description = "ble.sh settings (status bar, vi cursor shapes)"
+linux = "~/.blerc"
+
 [vimrc]
 source = ".vimrc"
 all = "~/.vimrc"

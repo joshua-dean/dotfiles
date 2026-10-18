@@ -21,6 +21,13 @@ let
     rev = "0de03f92f4d0a31333b7c3d6d103b6c09c0ee57e";
     hash = "sha256-1uPpnrUGMoG83onuxXxQo2/ShRoEMSLHmRKuJI2Hfm8=";
   };
+  # Hand URLs and files to Windows' default app (wslu, the usual tool, was dropped from nixpkgs).
+  # rundll32's handler avoids cmd/PowerShell quoting, which mangles URLs containing `&`.
+  windowsOpen = pkgs.writeShellScriptBin "xdg-open" ''
+    target=$1
+    [ -e "$target" ] && target=$(wslpath -w "$target") # local paths need a Windows path
+    exec /mnt/c/Windows/System32/rundll32.exe url.dll,FileProtocolHandler "$target"
+  '';
 in
 {
   home.stateVersion = "26.05";
@@ -42,7 +49,9 @@ in
     cloc # git cloc
     dnsutils # dig, for whoami-cloudflare
     orpie # rpn aliases
+    windowsOpen
   ];
+  home.sessionVariables.BROWSER = "xdg-open";
 
   # vim-plug for init.vim, which installs its plugins itself on first launch
   xdg.dataFile."nvim/site/autoload/plug.vim".source = "${pkgs.vimPlugins.vim-plug}/plug.vim";

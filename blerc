@@ -1,0 +1,11 @@
+# ble.sh settings (bash line editor, enabled on NixOS). Linked to ~/.blerc; see links.toml.
+
+# Persistent status bar on the terminal's last line: vi mode on the left, user@host on the right
+bleopt prompt_status_line='\q{keymap:vi/mode-indicator}\r\u@\h'
+bleopt keymap_vi_mode_string_nmap='-- NORMAL --'
+
+# Cursor shape per vi mode (DECSCUSR codes): blinking bar while inserting, steady block otherwise
+bleopt keymap_vi_imap_cursor=5
+bleopt keymap_vi_nmap_cursor=2
+bleopt keymap_vi_xmap_cursor=2
+bleopt keymap_vi_omap_cursor=4
