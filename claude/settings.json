@@ -69,5 +69,6 @@
       "Bash(git push * --mirror*)",
       "PowerShell(git push * --mirror*)"
     ]
-  }
+  },
+  "agentPushNotifEnabled": true
 }
