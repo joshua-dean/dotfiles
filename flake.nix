@@ -30,7 +30,10 @@
               "nix-command"
               "flakes"
             ];
-            environment.systemPackages = [ pkgs.git ];
+            environment.systemPackages = [
+              pkgs.git
+              pkgs.wget # VS Code WSL extension downloads its server with wget
+            ];
             programs.bash.blesh.enable = true; # fish-style autosuggestions in bash
             programs.nix-ld.enable = true; # run prebuilt binaries: VS Code server, uv-managed Python
 

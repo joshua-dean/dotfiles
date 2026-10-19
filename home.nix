@@ -40,6 +40,7 @@ in
     yq
     (callPackage ./pkgs/uv.nix { })
     rustup
+    nodejs # npm/npx; shadows the Windows ones WSL appends to PATH
     gcc
     nixfmt
     lazygit
