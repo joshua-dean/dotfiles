@@ -48,6 +48,11 @@ all = "~/.personal_bash_history_config"
 source = ".personal_bash_python_utils"
 all = "~/.personal_bash_python_utils"
 
+[powershell_profile]
+source = "profile.ps1"
+description = "Windows PowerShell profile (aliases)"
+windows = "{documents}/WindowsPowerShell/profile.ps1"
+
 [nvim]
 source = "init.vim"
 linux = "~/.config/nvim/init.vim"
